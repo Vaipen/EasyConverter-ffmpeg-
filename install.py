@@ -1,4 +1,3 @@
-```python
 import os
 import sys
 import shutil
@@ -109,5 +108,4 @@ def main():
     input("\nPress Enter to exit...")
 
 if __name__ == "__main__":
-    main()
-```
+    main
