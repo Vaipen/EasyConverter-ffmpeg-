@@ -3,10 +3,12 @@ Adds ffmpeg conversion to the context menu for easy and fast media file conversi
 
 How to use:
 
-Make sure you have installed ffmpeg > https://ffmpeg.org/download.html
+Make sure you have installed [ffmpeg](https://ffmpeg.org/download.html)
 
-ffmpeg guide > https://www.geeksforgeeks.org/installation-guide/how-to-install-ffmpeg-on-windows
+[ffmpeg guide](https://www.geeksforgeeks.org/installation-guide/how-to-install-ffmpeg-on-windows)
 
+
+Make sure you have installed [python](https://www.python.org/downloads/windows) or from Microsoft Store https://apps.microsoft.com/detail/9pnrbtzxmb4z?hl=en-US&gl=US
 
 
 Download the source code
