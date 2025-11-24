@@ -21,6 +21,10 @@ Right-click any file you want to convert > Send to > Media Converter.bat
 
 Enjoy!
 
+<img width="421" height="237" alt="{96894972-6FE5-4622-AB4A-DEF5A51D7802}" src="https://github.com/user-attachments/assets/6dbaacbb-bab8-4fd2-be14-ca7d379d8706" />
+<img width="372" height="260" alt="{503B3585-E530-40E5-9C63-C986C059A9CA}" src="https://github.com/user-attachments/assets/7c7d15db-2c2b-48e4-bb85-2971cf716a67" />
+<img width="397" height="287" alt="{CD1B09AB-B78F-4296-8DD8-0403F758BED7}" src="https://github.com/user-attachments/assets/8444a1d4-139b-4155-a3f2-b026d66605e6" />
 
+If you have any problems, please post a question in the issue repository.
 
 Made with DeepSeek AI
