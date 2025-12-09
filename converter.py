@@ -8,8 +8,6 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.core.image import Image
 from kivy.core.window import Window
-from kivy.graphics.texture import Texture
-from kivy.graphics import Color, Rectangle
 import subprocess
 from pathlib import Path
 
@@ -132,7 +130,7 @@ class WRecode(App):
         elif file.split('.')[-1] in file_types['video']:
             self.parameters = [TextInput(**edit_box_design) for _ in range(6)]
             choices = [
-                Button(text='Convert', on_press=lambda *args: self.convert_video(self, 0), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design, texture=Texture("misc\silly.jpg")), # FFFF 424242 4242424242244242424242424242424242424242424242424242 оставляем похуй
+                Button(text='Convert', on_press=lambda *args: self.convert_video(self, 0), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design), # FFFF 424242 4242424242244242424242424242424242424242424242424242 оставляем похуй
                 Button(text='Change bitrate', on_press=lambda *args: self.change_bitrate(self, 1), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
                 Button(text='Change audiotrack bitrate', on_press=lambda *args: self.change_audio_bitrate_in_video(self, 2), size_hint = (2,1), font_name="misc\InterTight-Bold.ttf", font_size=30, **buttons_design),
                 Button(text='Compress by size', on_press=lambda *args: self.compress_video_by_size(self, 3), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
