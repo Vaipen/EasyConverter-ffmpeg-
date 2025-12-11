@@ -162,7 +162,7 @@ class WRecode(App):
             ]
             labels = [
                 Label(text=f'Write this formats(without .):\n {" ".join(file_types["image"])}', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write size e.g."1000x1000"', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
+                Label(text='Write size e.g."1000:1000"', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
                 Label(text='JPEG Compression (1-100)', font_name="misc\InterTight-SemiBold.ttf", font_size=13)
             ]
         elif file.split('.')[-1] in file_types['video']:
