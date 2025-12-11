@@ -90,8 +90,7 @@ ffmpeg_folder = r"ffmpeg\bin\ffmpeg.exe"
 ffprobe_folder = r"ffmpeg\bin\ffprobe.exe"
 ffmpeg_path= script_path.replace("converter.py","")+ffmpeg_folder
 ffprobe_path= script_path.replace("converter.py","")+ffprobe_folder
-# file = sys.argv[1]
-file = r"E:\file.mp4"
+file = sys.argv[1]
 abs_file = Path(file)
 file_types = {
     'image': ("jpg", "jpeg", "png", "bmp", "gif", "webp"),
@@ -112,6 +111,7 @@ label_design = {
     # 'outline_color': (1,1,1,1)
 }
 edit_box_design = {
+    'multiline': False,
     'background_color': mainpallete["Dark"], 
     'foreground_color': mainpallete["White"],
     'font_name': "misc/InterTight-Medium.ttf"
@@ -121,29 +121,28 @@ edit_box_design = {
 
 Window.clearcolor = mainpallete["Black"]
 
+
+
+
+
 class WRecode(App):
     def build(self):
         self.map = []
          # я щас прийду
         file_layout = BoxLayout(orientation='horizontal')
         input_layout = BoxLayout(orientation='vertical')
-        input_label = Label(text=f'Input file:', font_name="misc\InterTight-MediumItalic.ttf", font_size=22, **label_design)
+        input_label = Label(text=f'Input file:', font_name="misc\InterTight-MediumItalic.ttf", font_size=22,  **label_design)
         # with input_label.canvas:
         #     Color(0, 1, 0, 0.25)
         #     Rectangle(pos=input_label.pos, size=input_label.size)
+
+        # def change_file_path(self, instance):
+        #     abs_file = Path(self.input.text)
+
         input_layout.add_widget(input_label)
-        self.input = TextInput(text=file, **edit_box_design) # пиши в лс я без звука щаSyntaxError: positional argument follows keyword argument где ну я выделяю блят, ты 
+        self.input = TextInput(text=file, on_text_validate=self.change_file_path, **edit_box_design) # пиши в лс я без звука щаSyntaxError: positional argument follows keyword argument где ну я выделяю блят, ты
         input_layout.add_widget(self.input)
-        output_layout = BoxLayout(orientation='vertical')
-        output_label = Label(text=f'Output file:', font_name="misc\InterTight-MediumItalic.ttf", font_size=22, **label_design)
-        # with output_label.canvas:
-        #     Color(0, 1, 0, 0.25)
-        #     Rectangle(pos=output_label.pos, size=output_label.size)
-        output_layout.add_widget(output_label)
-        self.output = TextInput(text=os.path.dirname(file), **edit_box_design)
-        output_layout.add_widget(self.output)
         file_layout.add_widget(input_layout)
-        file_layout.add_widget(output_layout)
         self.map.append([file_layout])
 
         choices = []
@@ -285,6 +284,7 @@ class WRecode(App):
     def resize_image(self, instance, size):
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -s {self.parameters[size].text} {abs_file.stem}_resized{abs_file.suffix}"
         os.system(command)
+        print(command)
     def compress_image(self, instance, jpeg_parameter):
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -q:v {self.parameters[jpeg_parameter].text} {abs_file.stem}_compressed.jpg"
         os.system(command)
@@ -298,8 +298,9 @@ class WRecode(App):
     def change_audio_samplerate(self, instance, sample_rate):
         command = f"echo UMC && cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a copy -ar {self.parameters[sample_rate].text} {abs_file.stem}_{self.parameters[sample_rate].text}.wav"
         os.system(command)
-    
 
+    def change_file_path(self, instance):
+        abs_file = Path(self.input.text)
 
 WRecode().run()
 
