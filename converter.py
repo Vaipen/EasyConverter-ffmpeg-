@@ -253,7 +253,7 @@ class WRecode(App):
         os.system(command)
 
     def convert_video(self, instance, format):
-        command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c copy {abs_file.stem}_converted{self.parameters[format].text}"
+        command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c copy {abs_file.stem}_converted.{self.parameters[format].text}"
         os.system(command)
 
     def compress_video_by_size(self, instance, size):
