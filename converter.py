@@ -47,41 +47,41 @@ from pathlib import Path
 #Color palette (0.0 - 1.0)
 
 
-pallete_dark = {"Black": (18/255,17/255,19/255,1),
-            "Dark": (34/255,29/255,37/255,1),
+pallete_dark = {"Background": (18/255,17/255,19/255,1),
+            "Back": (34/255,29/255,37/255,1),
             "Main": (137/255,152/255,120/255,1),
             "Highlight": (228/255,230/255,195/255,1),
-            "White": (247/255,247/255,242/255,1)}
+            "Contrast": (247/255,247/255,242/255,1)}
 
-pallete_darkblue = {"Black": (18/255,17/255,19/255,1),
-            "Dark": (34/255,29/255,37/255,1),
+pallete_darkblue = {"Background": (18/255,17/255,19/255,1),
+            "Back": (34/255,29/255,37/255,1),
             "Main": (137/255,152/255,120/255,1),
             "Highlight": (228/255,230/255,195/255,1),
-            "White": (247/255,247/255,242/255,1)}
+            "Contrast": (247/255,247/255,242/255,1)}
 
-pallete_white = {"Black": (18/255,17/255,19/255,1),
-            "Dark": (34/255,29/255,37/255,1),
+pallete_white = {"Background": (18/255,17/255,19/255,1),
+            "Back": (34/255,29/255,37/255,1),
             "Main": (255/255,255/255,255/255,1),
             "Highlight": (228/255,230/255,195/255,1),
-            "White": (247/255,247/255,242/255,1)}
+            "Contrast": (247/255,247/255,242/255,1)}
 
-pallete_whiteblue = {"Black": (18/255,17/255,19/255,1),
-            "Dark": (34/255,29/255,37/255,1),
+pallete_whiteblue = {"Background": (18/255,17/255,19/255,1),
+            "Back": (34/255,29/255,37/255,1),
             "Main": (137/255,152/255,120/255,1),
             "Highlight": (228/255,230/255,195/255,1),
-            "White": (247/255,247/255,242/255,1)}
+            "Contrast": (247/255,247/255,242/255,1)}
 
-pallete_green = {"Black": (18/255,17/255,19/255,1),
-            "Dark": (34/255,29/255,37/255,1),
+pallete_green = {"Background": (18/255,17/255,19/255,1),
+            "Back": (34/255,29/255,37/255,1),
             "Main": (137/255,152/255,120/255,1),
             "Highlight": (228/255,230/255,195/255,1),
-            "White": (247/255,247/255,242/255,1)}
+            "Contrast": (247/255,247/255,242/255,1)}
 
-pallete_pink = {"Black": (96/255,36/255,55/255,1),
-            "Dark": (138/255,40/255,70/255,1),
+pallete_pink = {"Background": (96/255,36/255,55/255,1),
+            "Back": (138/255,40/255,70/255,1),
             "Main": (224/255,122/255,162/255,1),
             "Highlight": (225/255,194/255,212/255,1),
-            "White": (225/255,224/255,233/255,1)}
+            "Contrast": (225/255,224/255,233/255,1)}
 
 mainpallete = pallete_green
 
@@ -106,20 +106,20 @@ buttons_design = {
     # 'outline_color': (1,1,1,1)
 } #НАААЙС РАБОТАЕТ <<< а хули оно работаект тоак нвые длобавть? ало ало хуем по лбу не дало??????????????????? ????<<<?????? я сделал
 label_design = {
-    'color': mainpallete["White"],
+    'color': mainpallete["Contrast"],
     # 'border_width': 2,
     # 'outline_color': (1,1,1,1)
 }
 edit_box_design = {
     'multiline': False,
-    'background_color': mainpallete["Dark"], 
-    'foreground_color': mainpallete["White"],
+    'background_color': mainpallete["Back"], 
+    'foreground_color': mainpallete["Contrast"],
     'font_name': "misc/InterTight-Medium.ttf"
     # 'outline_width': 2,
     # 'outline_color': (1,1,1,1)
 }
 
-Window.clearcolor = mainpallete["Black"]
+Window.clearcolor = mainpallete["Background"]
 
 
 
@@ -140,7 +140,7 @@ class WRecode(App):
         #     abs_file = Path(self.input.text)
 
         input_layout.add_widget(input_label)
-        self.input = TextInput(text=file, on_text_validate=self.change_file_path, **edit_box_design) # пиши в лс я без звука щаSyntaxError: positional argument follows keyword argument где ну я выделяю блят, ты
+        self.input = TextInput(text=file, on_text_validate=self.change_file_path, **edit_box_design, font_size=18) # пиши в лс я без звука щаSyntaxError: positional argument follows keyword argument где ну я выделяю блят, ты
         input_layout.add_widget(self.input)
         file_layout.add_widget(input_layout)
         self.map.append([file_layout])
