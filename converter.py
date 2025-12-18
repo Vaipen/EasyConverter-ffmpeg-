@@ -1,6 +1,6 @@
 import os
 import sys
-import ffmpeg
+
 from kivy.app import App  # чтобы все писать не с нуля
 from kivy.uix.boxlayout import BoxLayout  # единственный который я помню как работает
 from kivy.uix.label import Label
@@ -90,7 +90,12 @@ ffmpeg_folder = r"ffmpeg\bin\ffmpeg.exe"
 ffprobe_folder = r"ffmpeg\bin\ffprobe.exe"
 ffmpeg_path= script_path.replace("converter.py","")+ffmpeg_folder
 ffprobe_path= script_path.replace("converter.py","")+ffprobe_folder
-file = sys.argv[1]
+
+dev_mode=1
+if dev_mode == 1:
+    file = "D:/file.mp3"
+else:
+    file = sys.argv[1]
 abs_file = Path(file)
 file_types = {
     'image': ("jpg", "jpeg", "png", "bmp", "gif", "webp"),
@@ -104,7 +109,7 @@ buttons_design = {
     'color': mainpallete["Highlight"],
     # 'border_width': 2,
     # 'outline_color': (1,1,1,1)
-} #НАААЙС РАБОТАЕТ <<< а хули оно работаект тоак нвые длобавть? ало ало хуем по лбу не дало??????????????????? ????<<<?????? я сделал
+} #НАААЙС РАБОТАЕТ <<< а хули оно работаект то как новые добавить? ало ало хуем по лбу не дало??????????????????? ????<<<?????? я сделал
 label_design = {
     'color': mainpallete["Contrast"],
     # 'border_width': 2,
@@ -186,14 +191,15 @@ class WRecode(App):
                 Label(text='Extract audiotrack\n from video', font_name="misc\InterTight-SemiBold.ttf", font_size=13)
             ]
         elif file.split('.')[-1] in file_types['audio']:
-            self.parameters = [TextInput(**edit_box_design) for _ in range(2)]
+            self.parameters = [TextInput(**edit_box_design) for _ in range(3)]
             choices = [
-                # Button(text='Convert', on_press=self.c, size_hint = (2,1)),
+                Button(text='Convert', on_press=lambda *args: self.convert_audio(self, 0), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
                 Button(text='Change bitrate', on_press=lambda *args: self.change_audio_bitrate(self, 0), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
                 Button(text='Change sampling frequency', on_press=lambda *args: self.change_audio_samplerate(self, 1), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=30, **buttons_design) 
                 # Button(text='Compress with size', on_press=self.com, size_hint = (2,1))
             ]
             labels = [
+                Label(text=f'Write this formats(without .):\n {" ".join(file_types["audio"])}', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
                 Label(text='Write bitrate in kb/s (only value)', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
                 Label(text='Write sample rate', font_name="misc\InterTight-SemiBold.ttf", font_size=13)
             ]
@@ -289,14 +295,31 @@ class WRecode(App):
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -q:v {self.parameters[jpeg_parameter].text} {abs_file.stem}_compressed.jpg"
         os.system(command)
     #Audio funcs
-    # def convert_audio(self, instance, format):
-    #     command = f"echo UMC && cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -s {size_x}x{size_y} {abs_file.name}_resized.{format}"
-    #     os.system(command)
+    def convert_audio(self, instance, format):
+        command = "echo empty"
+        if format == "wav":
+            command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a pcm_s16le {abs_file.name}.{format}" #Несжатый, высокое
+        if format == "mp3":
+            command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a libmp3lame {abs_file.name}.{format}" #Универсальный
+        if format == "flac":
+            command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a flac -compression_level 8 {abs_file.name}.{format}"# Lossless
+        if format == "ogg":
+            command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a libvorbis {abs_file.name}.{format}"
+        if format == "aac":
+            command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a aac {abs_file.name}.{format}"
+        if format == "opus":
+            command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a libopus {abs_file.name}.{format}"
+        if format == "wma":
+            command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a wmav2 {abs_file.name}.{format}"
+        if format == "aiff":
+            command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a pcm_s16be {abs_file.name}.{format}"
+
+        os.system(command)
     def change_audio_bitrate(self, instance, bitrate):
-        command = f"echo UMC && cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a libmp3lame -b:a {self.parameters[bitrate].text}k {abs_file.stem}_compressed.mp3"
+        command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a libmp3lame -b:a {self.parameters[bitrate].text}k {abs_file.stem}_compressed.mp3"
         os.system(command)
     def change_audio_samplerate(self, instance, sample_rate):
-        command = f"echo UMC && cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a copy -ar {self.parameters[sample_rate].text} {abs_file.stem}_{self.parameters[sample_rate].text}.wav"
+        command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -ar {self.parameters[sample_rate].text} {abs_file.stem}_{self.parameters[sample_rate].text}.wav"
         os.system(command)
 
     def change_file_path(self, instance):
