@@ -9,6 +9,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.dropdown import DropDown
 from kivy.core.window import Window
 import subprocess
+import json
 from pathlib import Path
 
 # class Main(App):  # все функции от App(встроенный плейсхолдер), будут в Main(наше приложение)
@@ -93,7 +94,7 @@ ffprobe_path= script_path.replace("converter.py","")+ffprobe_folder
 
 dev_mode=1
 if dev_mode == 1:
-    file = "D:/file.mp3"
+    file = "D:/file.mp4"
 else:
     file = sys.argv[1]
 abs_file = Path(file)
@@ -112,6 +113,8 @@ buttons_design = {
 } #НАААЙС РАБОТАЕТ <<< а хули оно работаект то как новые добавить? ало ало хуем по лбу не дало??????????????????? ????<<<?????? я сделал
 label_design = {
     'color': mainpallete["Contrast"],
+    'font_name': "misc\InterTight-SemiBold.ttf",
+    'font_size':13
     # 'border_width': 2,
     # 'outline_color': (1,1,1,1)
 }
@@ -136,7 +139,7 @@ class WRecode(App):
          # я щас прийду
         file_layout = BoxLayout(orientation='horizontal')
         input_layout = BoxLayout(orientation='vertical')
-        input_label = Label(text=f'Input file:', font_name="misc\InterTight-MediumItalic.ttf", font_size=22,  **label_design)
+        input_label = Label(text=f'Input file:', font_name="misc\InterTight-MediumItalic.ttf", font_size=22, color=mainpallete["Contrast"])
         # with input_label.canvas:
         #     Color(0, 1, 0, 0.25)
         #     Rectangle(pos=input_label.pos, size=input_label.size)
@@ -166,29 +169,29 @@ class WRecode(App):
                 # Button(text='Compress with size', on_press=self.compress, size_hint = (2,1))
             ]
             labels = [
-                Label(text=f'Write this formats(without .):\n {" ".join(file_types["image"])}', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write size e.g."1000:1000"', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='JPEG Compression (1-100)', font_name="misc\InterTight-SemiBold.ttf", font_size=13)
+                Label(text=f'Write this formats(without .):\n {" ".join(file_types["image"])}', **label_design),
+                Label(text='Write size e.g."1000:1000"', **label_design),
+                Label(text='JPEG Compression (1-100)', **label_design)
             ]
         elif file.split('.')[-1] in file_types['video']:
             self.parameters = [TextInput(**edit_box_design) for _ in range(6)]
             choices = [
                 Button(text='Convert', on_press=lambda *args: self.convert_video(self, 0), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design), # FFFF 424242 4242424242244242424242424242424242424242424242424242 оставляем похуй
-                Button(text='Change bitrate', on_press=lambda *args: self.change_bitrate(self, 1), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
-                Button(text='Change audiotrack bitrate', on_press=lambda *args: self.change_audio_bitrate_in_video(self, 2), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=30, **buttons_design),
-                Button(text='Compress by size', on_press=lambda *args: self.compress_video_by_size(self, 3), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
-                Button(text='Change FPS', on_press=lambda *args: self.change_fps(self, 4), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
-                Button(text='Resize', on_press=lambda *args: self.resize_video(self, 5), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
+                Button(text='Compress', on_press=lambda *args: self.compress_video_by_size(self, 1), size_hint=(2, 1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
+                Button(text='Change FPS', on_press=lambda *args: self.change_fps(self, 2), size_hint=(2, 1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
+                Button(text='Resize', on_press=lambda *args: self.resize_video(self, 3), size_hint=(2, 1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
+                Button(text='Change bitrate', on_press=lambda *args: self.change_bitrate(self, 4), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
+                Button(text='Change audiotrack bitrate', on_press=lambda *args: self.change_audio_bitrate_in_video(self, 5), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=30, **buttons_design),
                 Button(text='Extract audio', on_press=self.extract_audio, size_hint=(3,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design)
             ]
             labels = [
-                Label(text=f'Write this formats(without .):\n {" ".join(file_types["video"])}', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write bitrate\n in kb/s (only value)', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write bitrate\n in kb/s (only value)', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write size in MB \n working not properly', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write FPS', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write size\n e.g."1000:1000"', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Extract audiotrack\n from video', font_name="misc\InterTight-SemiBold.ttf", font_size=13)
+                Label(text=f'Write this formats(without .):\n {" ".join(file_types["video"])}', **label_design),
+                Label(text='Just write size in MB', **label_design),
+                Label(text='Write FPS', **label_design),
+                Label(text='Write size\n e.g."1000:1000"', **label_design),
+                Label(text='Write bitrate\n in kb/s (only value)', **label_design),
+                Label(text='Write bitrate\n in kb/s (only value)', **label_design),
+                Label(text='Extract audiotrack\n from video', **label_design)
             ]
         elif file.split('.')[-1] in file_types['audio']:
             self.parameters = [TextInput(**edit_box_design) for _ in range(3)]
@@ -199,9 +202,9 @@ class WRecode(App):
                 # Button(text='Compress with size', on_press=self.com, size_hint = (2,1))
             ]
             labels = [
-                Label(text=f'Write this formats(without .):\n {" ".join(file_types["audio"])}', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write bitrate in kb/s (only value)', font_name="misc\InterTight-SemiBold.ttf", font_size=13),
-                Label(text='Write sample rate', font_name="misc\InterTight-SemiBold.ttf", font_size=13)
+                Label(text=f'Write this formats(without .):\n {" ".join(file_types["audio"])}', **label_design),
+                Label(text='Write bitrate in kb/s (only value)', **label_design),
+                Label(text='Write sample rate', **label_design)
             ]
         else:
             self.parameters = []
@@ -247,7 +250,7 @@ class WRecode(App):
         os.system(command)
 
     def change_fps(self, instance, fps):
-        command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -r {self.parameters[fps].text} {abs_file.stem}_editfps{abs_file.suffix}"
+        command = f'cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -vf "fps={self.parameters[fps].text}" {abs_file.stem}_editfps{abs_file.suffix}'
         os.system(command)
 
     def extract_audio(self, instance):
@@ -262,22 +265,62 @@ class WRecode(App):
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c copy {abs_file.stem}_converted.{self.parameters[format].text}"
         os.system(command)
 
-    def compress_video_by_size(self, instance, size):
-        result = subprocess.run([f"{ffprobe_path}", "-v", "error", "-show_entries",
-                                "format=duration", "-of",
-                                "default=noprint_wrappers=1:nokey=1", file],
+    def compress_video_by_size(self, instance, target_size_mb):
+
+        # ffprobe
+        cmd = [
+            ffprobe_path, "-v","error",
+            "-print_format", "json",
+            "-show_format",
+            "-show_streams",
+            file
+        ]
+
+        probe = subprocess.run(
+            cmd,
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT)
-        duration = float(result.stdout)
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        if probe.returncode != 0:
+            raise ValueError(f"ffprobe error: {probe.stderr}")
 
-        filesize = os.path.getsize(file)/1024**2
+        data = json.loads(probe.stdout)
 
-        new_bitrate = ((size * 8192) / duration)-128
-        print(duration)
-        print(filesize)
-        print(new_bitrate)
-        command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -b:v {new_bitrate}k {abs_file.stem}_compressed{abs_file.suffix}"
-        os.system(command)
+        duration = float(data["format"]["duration"])
+        if duration <= 0:
+            raise ValueError("Duration must be more than 0")
+
+        audio_bitrate = 128000
+        width = height = None
+
+        for stream in data["streams"]:
+            if stream.get["codec_type"] == "audio" and "bit_rate" in stream:
+                audio_bitrate = int(stream["bit_rate"])
+                break
+
+        for stream in data["streams"]:
+            if stream.get["codec_type"] == "video":
+                width = int(stream.get("width", 0))
+                height = int(stream.get("height", 0))
+                break
+
+        target_bits = target_size_mb *8*1024*1024
+        total_bitrate = target_bits / duration
+        video_bitrate = total_bitrate - audio_bitrate
+
+        if video_bitrate <= 0:
+            raise ValueError("Size too small")
+
+        video_kbps = int(video_bitrate/1000)
+        audio_kbps = int(audio_bitrate/1000)
+
+        null_out = "NUL" if os.name == "nt" else "/dev/null"
+
+        pass1 = (f'{ffmpeg_path} -y -i {file} -c:v libx264 -b:v {video_kbps}k -pass 1 -an -f null {null_out}')
+        pass2 = (f'{ffmpeg_path} -i {file} -c:v libx264 -b:v {video_kbps}k -pass 2 -c:a aac -b:a {audio_kbps}k {abs_file.stem}_compressed{abs_file.suffix}')
+        os.system(pass1)
+        os.system(pass2)
 
     def resize_video(self, instance, size):
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -vf scale={self.parameters[size].text} {abs_file.stem}_resized{abs_file.suffix}"
