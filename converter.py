@@ -48,29 +48,29 @@ from pathlib import Path
 #Color palette (0.0 - 1.0)
 
 
-pallete_dark = {"Background": (18/255,17/255,19/255,1),
-            "Back": (34/255,29/255,37/255,1),
+pallete_dark = {"Background": (0,0,0,1),
+            "Back": (18/255,17/255,19/255,1),
+            "Main": (34/255,39/255,37/255,1),
+            "Highlight": (238/255,240/255,242/255,1),
+            "Contrast": (250/255,250/255,255/255,1)}
+
+pallete_darkgreen = {"Background": (18/255,17/255,19/255,1),
+            "Back": (18/255,17/255,19/255,1),
             "Main": (137/255,152/255,120/255,1),
             "Highlight": (228/255,230/255,195/255,1),
             "Contrast": (247/255,247/255,242/255,1)}
 
-pallete_darkblue = {"Background": (18/255,17/255,19/255,1),
-            "Back": (34/255,29/255,37/255,1),
-            "Main": (137/255,152/255,120/255,1),
-            "Highlight": (228/255,230/255,195/255,1),
-            "Contrast": (247/255,247/255,242/255,1)}
-
-pallete_white = {"Background": (18/255,17/255,19/255,1),
-            "Back": (34/255,29/255,37/255,1),
+pallete_white = {"Background": (255/255,255/255,255/255,1),
+            "Back": (255/255,255/255,255/255,1),
             "Main": (255/255,255/255,255/255,1),
-            "Highlight": (228/255,230/255,195/255,1),
-            "Contrast": (247/255,247/255,242/255,1)}
+            "Highlight": (0,0,0,1),
+            "Contrast": (0,0,0,1)}
 
-pallete_whiteblue = {"Background": (18/255,17/255,19/255,1),
-            "Back": (34/255,29/255,37/255,1),
-            "Main": (137/255,152/255,120/255,1),
-            "Highlight": (228/255,230/255,195/255,1),
-            "Contrast": (247/255,247/255,242/255,1)}
+pallete_whiteblue = {"Background": (184/255,242/255,230/255,1),
+            "Back": (255/255,255/255,255/255,1),
+            "Main": (174/255,217/255,224/255,1),
+            "Highlight": (26/255,83/255,92/255,1),
+            "Contrast": (34/255,51/255,59/255,1)}
 
 pallete_green = {"Background": (18/255,17/255,19/255,1),
             "Back": (34/255,29/255,37/255,1),
@@ -84,7 +84,7 @@ pallete_pink = {"Background": (96/255,36/255,55/255,1),
             "Highlight": (225/255,194/255,212/255,1),
             "Contrast": (225/255,224/255,233/255,1)}
 
-mainpallete = pallete_green
+mainpallete = pallete_dark
 
 script_path = os.path.abspath(__file__)
 ffmpeg_folder = r"ffmpeg\bin\ffmpeg.exe"
@@ -92,7 +92,7 @@ ffprobe_folder = r"ffmpeg\bin\ffprobe.exe"
 ffmpeg_path= script_path.replace("converter.py","")+ffmpeg_folder
 ffprobe_path= script_path.replace("converter.py","")+ffprobe_folder
 
-dev_mode=0
+dev_mode=1
 if dev_mode == 1:
     file = "D:\Клипы\clip.mp4"
 else:
@@ -106,9 +106,9 @@ file_types = {
 
 buttons_design = {
     'background_color': mainpallete["Main"],
-    # 'background_normal': '',
+    'background_normal': 'misc/btn.png',
     'color': mainpallete["Highlight"],
-    # 'border_width': 2,
+    # 'border_width': 3,
     # 'outline_color': (1,1,1,1)
 } #НАААЙС РАБОТАЕТ <<< а хули оно работаект то как новые добавить? ало ало хуем по лбу не дало??????????????????? ????<<<?????? я сделал
 label_design = {
