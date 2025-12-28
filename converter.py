@@ -92,11 +92,11 @@ ffprobe_folder = r"ffmpeg\bin\ffprobe.exe"
 ffmpeg_path= script_path.replace("converter.py","")+ffmpeg_folder
 ffprobe_path= script_path.replace("converter.py","")+ffprobe_folder
 
-dev_mode=1
+dev_mode=0
 if dev_mode == 1:
-    file = "D:/file.mp4"
+    file = "D:\Клипы\clip.mp4"
 else:
-    file = sys.argv[1]
+    file = str(sys.argv[1])
 abs_file = Path(file)
 file_types = {
     'image': ("jpg", "jpeg", "png", "bmp", "gif", "webp"),
@@ -155,12 +155,12 @@ class WRecode(App):
 
         choices = []
 
-        if " " in file:
-            self.parameters = []
-            choices = [Label(text='Try renaming the file so that the name\ndoes not contain spaces or special symbols', font_name="misc\InterTight-SemiBold.ttf", font_size=17)]
-            labels = [Label(text='')]
+        # if " " in file:
+        #     self.parameters = []
+        #     choices = [Label(text='Try renaming the file so that the name\ndoes not contain spaces or special symbols', font_name="misc\InterTight-SemiBold.ttf", font_size=17)]
+        #     labels = [Label(text='')]
             
-        elif file.split('.')[-1] in file_types['image']:
+        if file.split('.')[-1] in file_types['image']:
             self.parameters = [TextInput(**edit_box_design) for _ in range(3)]
             choices = [
                 Button(text='Convert', on_press=lambda *args: self.convert_image(self, 0), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
@@ -196,9 +196,9 @@ class WRecode(App):
         elif file.split('.')[-1] in file_types['audio']:
             self.parameters = [TextInput(**edit_box_design) for _ in range(3)]
             choices = [
-                Button(text='Convert', on_press=lambda *args: self.convert_audio(self, 0), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
-                Button(text='Change bitrate', on_press=lambda *args: self.change_audio_bitrate(self, 0), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
-                Button(text='Change sampling frequency', on_press=lambda *args: self.change_audio_samplerate(self, 1), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=30, **buttons_design) 
+                Button(text='Convert', on_press=lambda *args: self.convert_audio(self, 0), size_hint = (2, 1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
+                Button(text='Change bitrate', on_press=lambda *args: self.change_audio_bitrate(self, 1), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=42, **buttons_design),
+                Button(text='Change sampling frequency', on_press=lambda *args: self.change_audio_samplerate(self, 2), size_hint = (2,1), font_name="misc\InterTight-Black.ttf", font_size=30, **buttons_design) 
                 # Button(text='Compress with size', on_press=self.com, size_hint = (2,1))
             ]
             labels = [
@@ -246,27 +246,53 @@ class WRecode(App):
     
     #Video funcs
     def change_audio_bitrate_in_video(self, instance, bitrate):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -b:a {self.parameters[bitrate].text}k {abs_file.stem}_audio_compressed{abs_file.suffix}"
         os.system(command)
 
     def change_fps(self, instance, fps):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f'cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -vf "fps={self.parameters[fps].text}" {abs_file.stem}_editfps{abs_file.suffix}'
         os.system(command)
 
     def extract_audio(self, instance):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -vn {abs_file.stem}_extracted.mp3"
         os.system(command)
 
     def change_bitrate(self, instance, bitrate):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -b:v {self.parameters[bitrate].text}k {abs_file.stem}_changed_bitrate{abs_file.suffix}"
         os.system(command)
 
     def convert_video(self, instance, format):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c copy {abs_file.stem}_converted.{self.parameters[format].text}"
         os.system(command)
 
     def compress_video_by_size(self, instance, target_size_mb):
-
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
+        
+        try:
+            target_size_mb = float(self.parameters[target_size_mb].text)
+            if target_size_mb <= 0:
+                raise ValueError
+        except:
+            print("Invalid target size")
+            return
+        
         # ffprobe
         cmd = [
             ffprobe_path, "-v","error",
@@ -295,19 +321,30 @@ class WRecode(App):
         width = height = None
 
         for stream in data["streams"]:
-            if stream.get["codec_type"] == "audio" and "bit_rate" in stream:
+            if stream.get("codec_type") == "audio" and "bit_rate" in stream:
                 audio_bitrate = int(stream["bit_rate"])
                 break
 
         for stream in data["streams"]:
-            if stream.get["codec_type"] == "video":
+            if stream.get("codec_type") == "video":
                 width = int(stream.get("width", 0))
                 height = int(stream.get("height", 0))
                 break
 
         target_bits = target_size_mb *8*1024*1024
         total_bitrate = target_bits / duration
+        audio_steps = [160000, 128000, 96000, 64000, 48000]
+        audio_steps = [a for a in audio_steps if a <= audio_bitrate]
+
         video_bitrate = total_bitrate - audio_bitrate
+
+        for a in audio_steps:
+            vb = total_bitrate - a
+            if vb >= 300_000:
+                audio_bitrate = a
+                video_bitrate = vb
+                break
+
 
         if video_bitrate <= 0:
             raise ValueError("Size too small")
@@ -315,31 +352,59 @@ class WRecode(App):
         video_kbps = int(video_bitrate/1000)
         audio_kbps = int(audio_bitrate/1000)
 
+        dir_name = abs_file.parent
+        base_name = abs_file.stem
+        ext = abs_file.suffix
+        # output_file = str(dir_name / f"{base_name}_compressed{ext}")
+        passlog = dir_name / base_name
+
+        if os.path.exists("ffmpeg2pass-0.log"):
+            os.remove("ffmpeg2pass-0.log")
+
         null_out = "NUL" if os.name == "nt" else "/dev/null"
 
-        pass1 = (f'{ffmpeg_path} -y -i {file} -c:v libx264 -b:v {video_kbps}k -pass 1 -an -f null {null_out}')
-        pass2 = (f'{ffmpeg_path} -i {file} -c:v libx264 -b:v {video_kbps}k -pass 2 -c:a aac -b:a {audio_kbps}k {abs_file.stem}_compressed{abs_file.suffix}')
+        pass1 = (f'{ffmpeg_path} -fflags +genpts+igndts -avoid_negative_ts make_zero -loglevel warning  -i "{file}" -fps_mode passthrough -c:v libx264 -b:v {video_kbps}k -pass 1 -passlogfile "{passlog}" -an -f null {null_out}')
+        pass2 = (f'{ffmpeg_path} -fflags +genpts+igndts -avoid_negative_ts make_zero -loglevel warning  -i "{file}" -fps_mode passthrough -c:v libx264 -b:v {video_kbps}k -pass 2 -passlogfile "{passlog}" -c:a aac -b:a {audio_kbps}k {abs_file.stem}_compessed{abs_file.suffix}')
         os.system(pass1)
         os.system(pass2)
 
+        for ext in (".log", ".log.mbtree"):
+            log_file = Path(str(passlog) + "-0" + ext)
+            if log_file.exists():
+                log_file.unlink()
+
     def resize_video(self, instance, size):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -vf scale={self.parameters[size].text} {abs_file.stem}_resized{abs_file.suffix}"
         os.system(command)
 
     #Image funcs
     def convert_image(self, instance, format):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} {abs_file.stem}.{self.parameters[format].text}"
         os.system(command)
     def resize_image(self, instance, size):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -s {self.parameters[size].text} {abs_file.stem}_resized{abs_file.suffix}"
         os.system(command)
         print(command)
     def compress_image(self, instance, jpeg_parameter):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -q:v {self.parameters[jpeg_parameter].text} {abs_file.stem}_compressed.jpg"
         os.system(command)
     #Audio funcs
     def convert_audio(self, instance, format):
-        command = "echo empty"
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         if format == "wav":
             command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a pcm_s16le {abs_file.name}.{format}" #Несжатый, высокое
         if format == "mp3":
@@ -356,12 +421,18 @@ class WRecode(App):
             command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a wmav2 {abs_file.name}.{format}"
         if format == "aiff":
             command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a pcm_s16be {abs_file.name}.{format}"
-
+        print("selected format ", format)
         os.system(command)
     def change_audio_bitrate(self, instance, bitrate):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -c:a libmp3lame -b:a {self.parameters[bitrate].text}k {abs_file.stem}_compressed.mp3"
         os.system(command)
     def change_audio_samplerate(self, instance, sample_rate):
+        if " " in str(abs_file.name):
+            print("The file name contains spaces, please remove them.")
+            return
         command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -ar {self.parameters[sample_rate].text} {abs_file.stem}_{self.parameters[sample_rate].text}.wav"
         os.system(command)
 
