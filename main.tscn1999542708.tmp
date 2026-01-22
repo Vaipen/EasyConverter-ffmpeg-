@@ -151,100 +151,6 @@ vertical_alignment = 2
 layout_mode = 2
 icon = ExtResource("6_7mycd")
 
-[node name="Window" type="Window" parent="MarginContainer/VBoxContainer/Bottom/Settings"]
-disable_3d = true
-position = Vector2i(200, 60)
-size = Vector2i(400, 500)
-visible = false
-unresizable = true
-always_on_top = true
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Themes"
-
-[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
-columns = 3
-
-[node name="Dark" type="Button" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Green" type="Button" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="White" type="Button" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Pink" type="Button" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "Decrease audio bitrate
-while compress video"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "Lang"
-
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-
-[node name="ProgressBar" type="Panel" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -350.0
-offset_top = 150.0
-offset_right = 350.0
-offset_bottom = 250.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(350, 50)
-
-[node name="MarginContainer" type="MarginContainer" parent="ProgressBar"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ProgressBar/MarginContainer"]
-layout_mode = 2
-
-[node name="ProgressBar" type="ProgressBar" parent="ProgressBar/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 2
-
-[node name="Label" type="Label" parent="ProgressBar/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
 [node name="ffmpeg funcs" type="Node" parent="."]
 script = ExtResource("9_4c57u")
 
@@ -254,4 +160,3 @@ script = ExtResource("9_4c57u")
 [connection signal="pressed" from="MarginContainer/VBoxContainer/VideoFuncs/Compress/Function" to="." method="_compress_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/VideoFuncs/Edit FPS/Function" to="." method="_editfps_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/VideoFuncs/Extract Audio/Function" to="." method="_extractaudio_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Bottom/Settings" to="." method="_on_settings_pressed"]
