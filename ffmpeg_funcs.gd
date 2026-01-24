@@ -1,9 +1,16 @@
 extends Node
-#
+@onready var main: Control = $".."
+var exe_path := OS.get_executable_path()
+var exe_dir := exe_path.get_base_dir()
+var ffmpeg_path := str(exe_dir+r"ffmpeg\bin\ffmpeg.exe")
+var ffprobe_path := str(exe_dir+r"ffmpeg\bin\ffprobe.exe")
+
 ##region Video functions
-#func change_audio_bitrate_in_video(bitrate):
-	#command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -b:a {self.parameters[bitrate].text}k {abs_file.stem}_audio_compressed{abs_file.suffix}"
-	#OS.system(command)
+func change_audio_bitrate_in_video(bitrate: int):
+	var command = [ffmpeg_path+" -i "+main.file_path+" -b:a "+str(bitrate)+"k "+main.file_path.get_file().get_basename()+"_audio_compressed"+str(bitrate)+"k "+main.file_path.get_extension()]
+	print(command)
+	OS.execute("cd",["/D", exe_dir])
+	OS.execute(ffmpeg_path,command)
 #
 #func change_fps(fps):
 	#command = f"cd /D {os.path.dirname(file)} && {ffmpeg_path} -i {abs_file.name} -r {self.parameters[fps].text} {abs_file.stem}_editfps{abs_file.suffix}"

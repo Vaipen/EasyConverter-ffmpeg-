@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://e03h7m8yt8r3" path="res://ui/icons/settings_64dp_E3E3E3_FILL0_wght400_GRAD0_opsz48.svg" id="6_7mycd"]
 [ext_resource type="Script" uid="uid://gbe4swybcoqx" path="res://ffmpeg_funcs.gd" id="9_4c57u"]
 
-[node name="Main" type="Control" node_paths=PackedStringArray("input_file_path")]
+[node name="Main" type="Control" node_paths=PackedStringArray("input_file_path", "convert_format_option")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,6 +19,16 @@ grow_vertical = 2
 theme = ExtResource("1_ig7tw")
 script = ExtResource("2_kek77")
 input_file_path = NodePath("MarginContainer/VBoxContainer/Header/FilePath")
+convert_format_option = NodePath("MarginContainer/VBoxContainer/VideoFuncs/Convert/Option")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.23921569, 0.23921569, 0.23921569, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -46,8 +56,10 @@ text = "C:/___/______.___"
 alignment = 0
 
 [node name="FileDialog" type="FileDialog" parent="MarginContainer/VBoxContainer/Header/FilePath"]
-title = "Select a File"
+oversampling_override = 1.0
+title = "Open a File"
 position = Vector2i(0, 36)
+size = Vector2i(653, 360)
 ok_button_text = "Select"
 dialog_hide_on_ok = true
 file_mode = 0
@@ -73,8 +85,6 @@ icon = ExtResource("2_lquwl")
 [node name="Option" type="OptionButton" parent="MarginContainer/VBoxContainer/VideoFuncs/Convert"]
 layout_mode = 2
 size_flags_horizontal = 3
-item_count = 1
-popup/item_0/id = 0
 
 [node name="FAQ" type="Button" parent="MarginContainer/VBoxContainer/VideoFuncs/Convert"]
 layout_mode = 2
@@ -153,11 +163,15 @@ icon = ExtResource("6_7mycd")
 
 [node name="Window" type="Window" parent="MarginContainer/VBoxContainer/Bottom/Settings"]
 disable_3d = true
-position = Vector2i(200, 60)
+oversampling_override = 1.0
+title = "Options"
+initial_position = 1
 size = Vector2i(400, 500)
 visible = false
 unresizable = true
 always_on_top = true
+minimize_disabled = true
+maximize_disabled = true
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/Bottom/Settings/Window"]
 anchors_preset = 15
@@ -212,7 +226,6 @@ text = "Lang"
 layout_mode = 2
 
 [node name="ProgressBar" type="Panel" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -244,6 +257,7 @@ size_flags_vertical = 2
 
 [node name="Label" type="Label" parent="ProgressBar/MarginContainer/VBoxContainer"]
 layout_mode = 2
+text = "Process [file.___] | output"
 
 [node name="ffmpeg funcs" type="Node" parent="."]
 script = ExtResource("9_4c57u")
